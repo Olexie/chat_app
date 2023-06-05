@@ -19,7 +19,7 @@ const Start = ({ navigation }) => {
         style={[styles.container, styles.image]}
       >
         <View style={styles.subContainer}>
-          <Text style={styles.title}>Chat App!</Text>
+          <Text style={styles.title}>Chat App</Text>
         </View>
         <View style={styles.subContainer}>
           <TextInput
@@ -42,8 +42,8 @@ const Start = ({ navigation }) => {
               onPress={() => setColor('green')}
             ></TouchableOpacity>
             <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: 'yellow' }]}
-              onPress={() => setColor('yellow')}
+              style={[styles.radioButton, { backgroundColor: 'black' }]}
+              onPress={() => setColor('black')}
             ></TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -55,7 +55,7 @@ const Start = ({ navigation }) => {
               })
             }
           >
-            <Text>Go to Chat</Text>
+            <Text>Press to Chat</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: '88%',
     margin: 12,
-    borderWidth: 1,
+    borderWidth: 3,
     padding: 10,
     fontWeight: '900',
   },
