@@ -8,8 +8,6 @@ import Chat from './components/Chat';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [text, setText] = useState('');
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Start">
