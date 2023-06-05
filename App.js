@@ -1,48 +1,23 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Start from './components/Start';
+import Chat from './components/Chat';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [text, setText] = useState('');
 
-  //alert the user input
-  const alertMyText = () => {
-    Alert.alert(text);
-  };
-
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.textInput}
-        value={text}
-        onChangeText={setText}
-        placeholder="Type Something Here"
-      />
-      <Text style={styles.textDisplay}>You wrote: {text}</Text>
-      <Button
-        onPress={() => {
-          alertMyText();
-        }}
-        title="Press"
-      />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Start">
+        <Stack.Screen name="Start" component={Start} />
+        <Stack.Screen name="Chat" component={Chat} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textInput: {
-    width: '88%',
-    borderWidth: 1,
-    height: 50,
-    padding: 10,
-  },
-  textDisplay: {
-    height: 50,
-    lineHeight: 50,
-  },
-});
 
 export default App;
