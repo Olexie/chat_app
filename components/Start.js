@@ -6,12 +6,32 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-gifted-chat';
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 
 const Start = ({ navigation }) => {
-  const [text, setText] = useState('');
+  const auth = getAuth();
+  const [name, setName] = useState('');
   const [color, setColor] = useState('');
+
+  // Function to sign in the user anonymously
+  const signInUser = () => {
+    signInAnonymously(auth)
+      .then((result) => {
+        // Navigate to the Chat screen with user ID, name, and color
+        navigation.navigate('Chat', {
+          name: name,
+          color: color ? color : 'white',
+          uid: result.user.uid,
+        });
+        Alert.alert('Signed in successfully!');
+      })
+      .catch((error) => {
+        Alert.alert('Unable to sign in, try again later.');
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -26,7 +46,7 @@ const Start = ({ navigation }) => {
           <TextInput
             placeholder="Your name"
             style={styles.input}
-            onChangeText={setText}
+            onChangeText={setName}
           />
           <Text>Choose Background Color</Text>
           <View style={styles.radioButtonContainer}>
@@ -47,16 +67,13 @@ const Start = ({ navigation }) => {
               onPress={() => setColor('black')}
             ></TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              navigation.navigate('Chat', {
-                name: text ? text : 'User',
-                color: color ? color : 'white',
-              })
-            }
-          >
-            <Text>Press to Chat</Text>
+          <TouchableOpacity style={styles.fauxButton}>
+            <Text
+              onPress={signInUser}
+              style={[styles.colorSelect__text, styles.fauxButton__text]}
+            >
+              Press to Chat
+            </Text>
           </TouchableOpacity>
         </View>
         {Platform.OS === 'ios' ? (

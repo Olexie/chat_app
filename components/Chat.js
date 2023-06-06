@@ -7,37 +7,49 @@ import {
   ImageBackground,
 } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  query,
+  orderBy,
+} from 'firebase/firestore';
 
-const Chat = ({ route, navigation }) => {
-  const { name, color } = route.params;
+const Chat = ({ db, route, navigation }) => {
+  const { name, color, uid } = route.params;
   const [messages, setMessages] = useState([]);
 
+  let unsubMessages;
   useEffect(() => {
+    // Set navigation options for the title
     navigation.setOptions({ title: name });
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-      {
-        _id: 2,
-        text: 'This is a system message',
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
+
+    if (unsubMessages) unsubMessages();
+    unsubMessages = null;
+    // Create a query to fetch messages from the Firestore collection
+    const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
+    // Subscribe to real-time updates using onSnapshot
+    unsubMessages = onSnapshot(q, (docs) => {
+      let newMessages = [];
+      // Process each document and create a new message object
+      docs.forEach((doc) => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis()),
+        });
+      });
+      setMessages(newMessages);
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => {
+      if (unsubMessages) unsubMessages();
+    };
   }, []);
 
   const onSend = (newMessages) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, newMessages)
-    );
+    addDoc(collection(db, 'messages'), newMessages[0]);
   };
 
   const renderBubble = (props) => {
@@ -57,14 +69,15 @@ const Chat = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: color }]}>
       <GiftedChat
         style={styles.textingBox}
         messages={messages}
         renderBubble={renderBubble}
         onSend={(messages) => onSend(messages)}
         user={{
-          _id: 1,
+          _id: uid,
+          name: name,
         }}
       />
       {Platform.OS === 'android' ? (
