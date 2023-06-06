@@ -67,10 +67,10 @@ const Start = ({ navigation }) => {
               onPress={() => setColor('black')}
             ></TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.fauxButton}>
+          <TouchableOpacity style={styles.button}>
             <Text
               onPress={signInUser}
-              style={[styles.colorSelect__text, styles.fauxButton__text]}
+              style={[styles.colorSelect__text, styles.buttonText]}
             >
               Press to Chat
             </Text>
@@ -108,9 +108,17 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
+    width: '100%',
+    backgroundColor: '#757083',
+    borderRadius: 50,
+    padding: 15,
+    height: 50,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '600',
   },
   radioButton: {
     backgroundColor: 'black',

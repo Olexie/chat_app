@@ -56,9 +56,17 @@ const Chat = ({ db, route, navigation }) => {
     return (
       <Bubble
         {...props}
+        textStyle={{
+          right: {
+            color: 'black',
+          },
+          left: {
+            color: '#24204F',
+          },
+        }}
         wrapperStyle={{
           right: {
-            backgroundColor: '#00FF00',
+            backgroundColor: '#EAD1DC',
           },
           left: {
             backgroundColor: '#69cfff',
