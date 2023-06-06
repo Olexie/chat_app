@@ -7,6 +7,7 @@ import {
   View,
   ImageBackground,
 } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-gifted-chat';
 
 const Start = ({ navigation }) => {
   const [text, setText] = useState('');
@@ -58,6 +59,9 @@ const Start = ({ navigation }) => {
             <Text>Press to Chat</Text>
           </TouchableOpacity>
         </View>
+        {Platform.OS === 'ios' ? (
+          <KeyboardAvoidingView behavior="padding" />
+        ) : null}
       </ImageBackground>
     </View>
   );
