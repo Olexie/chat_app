@@ -76,9 +76,6 @@ const Start = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        {Platform.OS === 'ios' ? (
-          <KeyboardAvoidingView behavior="padding" />
-        ) : null}
       </ImageBackground>
     </View>
   );
