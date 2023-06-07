@@ -11,7 +11,6 @@ import {
 } from 'firebase/firestore';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getStorage } from 'firebase/storage';
 
 import Start from './components/Start';
@@ -19,31 +18,24 @@ import Chat from './components/Chat';
 
 const Stack = createNativeStackNavigator();
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyDSx5uj0BMIo11oYzNagDd0zsVcGPgG61I',
-  authDomain: 'chat-app-2b6ab.firebaseapp.com',
-  projectId: 'chat-app-2b6ab',
-  storageBucket: 'chat-app-2b6ab.appspot.com',
-  messagingSenderId: '145317901506',
-  appId: '1:145317901506:web:01b8effb39851d8410775b',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-//network connection status
-//const connectionStatus = useNetInfo();
-
-const storage = getStorage(app);
-
 const App = () => {
+  const firebaseConfig = {
+    apiKey: 'AIzaSyDSx5uj0BMIo11oYzNagDd0zsVcGPgG61I',
+    authDomain: 'chat-app-2b6ab.firebaseapp.com',
+    projectId: 'chat-app-2b6ab',
+    storageBucket: 'chat-app-2b6ab.appspot.com',
+    messagingSenderId: '145317901506',
+    appId: '1:145317901506:web:01b8effb39851d8410775b',
+  };
+
   const connectionStatus = useNetInfo();
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
   useEffect(() => {
     //checking the connection status and providing response accordingly
-
     if (connectionStatus.isConnected === false) {
       Alert.alert('Connection Lost!');
       disableNetwork(db);

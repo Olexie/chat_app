@@ -46,7 +46,7 @@ const Chat = ({ isConnected, db, route, navigation }) => {
         cacheMessages(newMessages);
         setMessages(newMessages);
       });
-    } else loadCachedMrssages();
+    } else loadCachedMessages();
 
     // Clean up the subscription when the component unmounts
     return () => {
@@ -72,7 +72,7 @@ const Chat = ({ isConnected, db, route, navigation }) => {
   };
 
   const renderInputToolbar = (props) => {
-    if (isConnected) {
+    if (isConnected == true) {
       return <InputToolbar {...props} />;
     } else {
       return null;
