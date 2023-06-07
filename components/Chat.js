@@ -15,8 +15,10 @@ import {
   orderBy,
 } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MapView from 'react-native-maps';
+import CustomActions from './CustomActions';
 
-const Chat = ({ isConnected, db, route, navigation }) => {
+const Chat = ({ isConnected, db, route, navigation, storage }) => {
   const { name, color, uid } = route.params;
   const [messages, setMessages] = useState([]);
 
@@ -79,6 +81,40 @@ const Chat = ({ isConnected, db, route, navigation }) => {
     }
   };
 
+  // callback function to be passed in the GiftedChat custom actions prop that returns a CustomAction component with relevant prop data.
+  const renderCustomActions = (props) => {
+    return <CustomActions storage={storage} uid={uid} {...props} />;
+  };
+
+  // a custom view for handling messages sent explicitly with a location property, which triggers Expos MapView component in the render/return. The location object is sent in a special getLocation handler in CustomActions.js
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <View style={{ borderRadius: 13, margin: 3 }}>
+          <MapView
+            style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+            provider="google"
+            region={{
+              latitude: currentMessage.location.latitude,
+              longitude: currentMessage.location.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            onPress={() => {
+              if (Platform.OS === 'android') {
+                Linking.openURL(
+                  `geo:${currentMessage.location.latitude}, ${currentMessage.location.longitude}`
+                );
+              }
+            }}
+          />
+        </View>
+      );
+    }
+    return null;
+  };
+
   const renderBubble = (props) => {
     return (
       <Bubble
@@ -111,6 +147,8 @@ const Chat = ({ isConnected, db, route, navigation }) => {
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar}
         onSend={(messages) => onSend(messages)}
+        renderActions={renderCustomActions}
+        renderCustomView={renderCustomView}
         user={{
           _id: uid,
           name: name,
